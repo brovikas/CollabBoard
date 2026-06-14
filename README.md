@@ -1,66 +1,64 @@
-# CollabBoard — Realtime Collaborative Design Tool (MERN)
+# CollabBoard
 
-A simple, elegant MERN-stack application where multiple users can join a shared
-"room" and draw on a whiteboard and write shared notes together in real time.
-
-This is intentionally kept **basic** — no authentication, no complex shape
-tools, no version history UI. It focuses on the core collaboration loop:
-join a room → draw / write → see everyone's changes instantly.
+A real-time collaborative whiteboard and notes app, built with the MERN stack (MongoDB, Express, React, Node.js) and Socket.io. Multiple people can join the same room using a shared code, draw together on a canvas, and write shared notes — all updated live for everyone in the room.
 
 ---
 
-## ✨ Features
+- **Live Preview:** [https://collab-board-six-chi.vercel.app/](https://collab-board-six-chi.vercel.app/)
 
-- **Realtime drawing** — pen and eraser tools, multiple colors and brush sizes, synced instantly via Socket.io
-- **Shared text notes** — a live collaborative text area per room
-- **Rooms** — create a new room (random code) or join an existing one via code/link
-- **Presence** — see who else is currently in the room (avatar list + live count)
-- **Persistence** — board strokes and notes are saved to MongoDB, so reloading or rejoining restores the board
-- **Undo & Clear board** — remove the last stroke or wipe the whole canvas for everyone
-- **Responsive, premium UI** — soft cream/indigo theme, rounded corners, built with the latest Tailwind CSS (v4, CSS-first config, no PostCSS config needed)
+## Features
 
----
-
-## 🧱 Tech Stack
-
-| Layer      | Tech                                              |
-|------------|---------------------------------------------------|
-| Frontend   | React 18 + Vite, React Router, Tailwind CSS v4    |
-| Realtime   | Socket.io (client + server)                       |
-| Backend    | Node.js + Express                                  |
-| Database   | MongoDB + Mongoose                                 |
+- **Realtime drawing** — pen and eraser tools, multiple colors, adjustable brush sizes, live stroke previews while others draw
+- **Shared notes** — a text area that syncs instantly across everyone in the room
+- **Rooms** — create a new room (random code) or join an existing one with a code or shared link
+- **Live presence** — see who's online with avatars and names in a dropdown member list
+- **Persistence** — board strokes and notes are saved to MongoDB, so reloading or rejoining restores everything
+- **Undo & clear board** — remove the last stroke or wipe the canvas for everyone
+- **Responsive, premium UI** — soft cream/indigo theme, rounded cards, built with Tailwind CSS
 
 ---
 
-## 📁 Project Structure
+## Tech Stack
+
+| Layer    | Technology |
+|----------|------------|
+| Frontend | React 18, Vite, React Router, Tailwind CSS v4 |
+| Realtime | Socket.io |
+| Backend  | Node.js, Express |
+| Database | MongoDB, Mongoose |
+| Deployment | Render, Vercel |
+
+---
+
+## Project Structure
 
 ```
-collab-design-tool/
-├── server/                  # Express + Socket.io backend
+collab-board/
+├── server/
 │   ├── models/
-│   │   └── Room.js          # Mongoose schema for rooms (canvas + text data)
+│   │   └── Room.js              # Schema: room ID, canvas strokes, shared text
 │   ├── routes/
-│   │   └── roomRoutes.js     # REST endpoints (join/create/list rooms)
+│   │   └── roomRoutes.js        # REST: create/join, fetch, list rooms
 │   ├── socket/
-│   │   └── socketHandlers.js # All realtime event handling
+│   │   └── socketHandlers.js    # Realtime events: drawing, text, presence
 │   ├── .env.example
 │   ├── package.json
-│   └── server.js             # Entry point
+│   └── server.js                # Entry point
 │
-└── client/                  # React + Vite frontend
+└── client/
     ├── src/
     │   ├── components/
-    │   │   ├── Whiteboard.jsx  # Canvas drawing component
-    │   │   ├── TextEditor.jsx  # Shared notes textarea
-    │   │   └── UserList.jsx    # Online users avatars
+    │   │   ├── Whiteboard.jsx   # Canvas drawing
+    │   │   ├── TextEditor.jsx   # Shared notes
+    │   │   └── UserList.jsx     # Online members dropdown
     │   ├── pages/
-    │   │   ├── Home.jsx        # Landing page (join/create room)
-    │   │   └── Room.jsx        # Main collaboration room
-    │   ├── api.js               # REST API helper
-    │   ├── socket.js             # Socket.io client instance
+    │   │   ├── Home.jsx         # Create/join room
+    │   │   └── Room.jsx         # Main collaboration view
+    │   ├── api.js                # REST helper
+    │   ├── socket.js              # Socket.io client instance
     │   ├── App.jsx
     │   ├── main.jsx
-    │   └── index.css             # Tailwind v4 import + theme tokens
+    │   └── index.css              # Tailwind v4 theme tokens
     ├── .env.example
     ├── index.html
     ├── package.json
@@ -69,37 +67,35 @@ collab-design-tool/
 
 ---
 
-## 🚀 Getting Started
+## Local Setup
 
 ### Prerequisites
 
 - Node.js 18+
-- MongoDB running locally (or a MongoDB Atlas connection string)
+- MongoDB (local instance or MongoDB Atlas)
 
-### 1. Clone & install
+### 1. Install dependencies
 
 ```bash
 # Backend
 cd server
 npm install
 
-# Frontend (in a separate terminal)
+# Frontend (separate terminal)
 cd client
 npm install
 ```
 
 ### 2. Configure environment variables
 
-**server/.env** (copy from `.env.example`):
-
+**server/.env**
 ```
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/collab-design-tool
 CLIENT_URL=http://localhost:5173
 ```
 
-**client/.env** (copy from `.env.example`):
-
+**client/.env**
 ```
 VITE_API_URL=http://localhost:5000/api
 VITE_SOCKET_URL=http://localhost:5000
@@ -108,84 +104,84 @@ VITE_SOCKET_URL=http://localhost:5000
 ### 3. Run the app
 
 ```bash
-# Terminal 1 - start backend
+# Terminal 1
 cd server
-npm run dev      # or: npm start
+npm run dev
 
-# Terminal 2 - start frontend
+# Terminal 2
 cd client
 npm run dev
 ```
 
-Open `http://localhost:5173` in your browser. To test real-time collaboration,
-open the same room link in a second tab/window or a different browser.
+Open `http://localhost:5173`. Open the same room link in a second tab or browser to test real-time sync.
 
 ---
 
-## 🕹️ How It Works
+## Deployment (Render + Vercel)
 
-1. **Home page** — Enter your name and either create a new room (gets a random
-   6-character code) or join an existing room via its code.
-2. **Room page** — You'll see:
-   - A **whiteboard** (left/main) with pen/eraser tools, color palette, brush
-     sizes, undo, and clear-board actions.
-   - A **shared notes panel** (right, or via tab on mobile) — a plain text area
-     that syncs live across all participants.
-   - A **presence bar** at the top showing avatars of everyone currently online
-     in the room, plus a "Share Link" button to invite others.
-3. Every stroke, text change, undo, and clear action is broadcast via
-   **Socket.io** to all connected clients in that room, and persisted to
-   **MongoDB** (debounced) so the board state survives reloads.
+### MongoDB
+Use MongoDB Atlas (free tier works). Whitelist all IPs (`0.0.0.0/0`) for simplicity, or restrict to Render's IPs.
 
----
+### Backend → Render
 
-## 🎨 Design / Theming
+1. Push your code to GitHub.
+2. Render dashboard → **New → Web Service**, connect your repo, set root directory to `server`.
+3. Build command: `npm install`
+4. Start command: `npm start`
+5. Environment variables:
+   - `MONGO_URI` → your Atlas connection string
+   - `CLIENT_URL` → your Vercel frontend URL (e.g. `https://your-app.vercel.app`)
+6. Deploy and note the generated URL (e.g. `https://collab-server.onrender.com`)
 
-The UI uses **Tailwind CSS v4** with a CSS-first theme defined in
-`client/src/index.css` via the `@theme` directive
+### Frontend → Vercel
 
-Theme tokens:
+1. Vercel dashboard → **New Project**, import the repo, set root directory to `client`.
+2. Framework preset: Vite (auto-detected, output directory `dist`)
+3. Environment variables:
+   - `VITE_API_URL` → `https://collab-server.onrender.com/api`
+   - `VITE_SOCKET_URL` → `https://collab-server.onrender.com`
+4. Deploy.
 
-- `cream` / `cream-dark` — soft warm background tones
-- `ink` — primary text color
-- `muted` — secondary/subtle text
-- `accent` / `accent-dark` / `accent-soft` — indigo accent for buttons, highlights, and active states
-Rounded corners, soft shadows, and generous
-spacing are used throughout for a calm, premium feel.
+### Final step
+
+Once Vercel gives you the live domain, update `CLIENT_URL` on Render to match exactly (including `https://`) and redeploy the backend so CORS allows requests from your frontend.
 
 ---
 
-## 🔌 Socket.io Events Reference
+## How It Works
 
-| Event            | Direction        | Payload                                              | Purpose                                |
-|-------------------|------------------|-------------------------------------------------------|-----------------------------------------|
-| `join-room`       | client → server | `{ roomId, username, color }`                         | Join a room, get initial board/text data |
-| `room-data`       | server → client | `{ canvasData, textContent }`                         | Initial state on join                    |
-| `user-list`       | server → client | `[{ socketId, username, color }]`                     | Updated presence list                    |
-| `user-joined`     | server → client | `{ username, color }`                                 | Someone joined notification              |
-| `draw-stroke`     | both             | `{ roomId, stroke }`                                  | A completed stroke                       |
-| `draw-preview`    | both             | `{ roomId, data }`                                    | In-progress stroke preview               |
-| `clear-canvas`    | both             | `{ roomId }`                                          | Clear the whole board                    |
-| `undo-stroke`     | client → server | `{ roomId }`                                          | Remove the last stroke                   |
-| `canvas-sync`     | server → client | `canvasData[]`                                        | Full canvas resync (after undo)          |
-| `text-update`     | both             | `{ roomId, content }`                                 | Shared notes text change                 |
-| `cursor-move`     | both             | `{ roomId, x, y }`                                    | (Optional) live cursor position          |
+1. **Home page** — enter your name, then create a new room (random 6-character code) or join an existing one by code.
+2. **Room page** —
+   - **Whiteboard**: pen/eraser tools, color palette, brush sizes, undo, and clear-board actions.
+   - **Shared notes**: a text panel synced live across all participants.
+   - **Members list**: click the avatar stack in the header to see everyone currently online with their name and avatar.
+   - **Share Link**: copies the room URL so others can join instantly.
+3. Every stroke, text edit, undo, and clear is broadcast via Socket.io to everyone in the room and persisted (debounced) to MongoDB.
 
 ---
 
-## 📌 Notes & Possible Extensions
+## Socket.io Events Reference
 
-This project is deliberately minimal. Ideas for extending it:
-
-- User authentication and saved/named boards per account
-- Shapes (rectangles, circles, text labels) on the canvas
-- Export board as an image (PNG)
-- Room password protection
-- Chat panel alongside notes
-- Per-user cursor indicators on the canvas
+| Event | Direction | Payload | Purpose |
+|-------|-----------|---------|---------|
+| `join-room` | client → server | `{ roomId, username, color }` | Join room, request initial state |
+| `room-data` | server → client | `{ canvasData, textContent }` | Initial board/notes on join |
+| `user-list` | server → client | `[{ socketId, username, color }]` | Updated list of online users |
+| `user-joined` | server → client | `{ username, color }` | New user joined notification |
+| `draw-stroke` | both | `{ roomId, stroke }` | A completed stroke |
+| `draw-preview` | both | `{ roomId, data }` | Live in-progress stroke |
+| `clear-canvas` | both | `{ roomId }` | Clear the whole board |
+| `undo-stroke` | client → server | `{ roomId }` | Remove the last stroke |
+| `canvas-sync` | server → client | `canvasData[]` | Full canvas resync after undo |
+| `text-update` | both | `{ roomId, content }` | Shared notes change |
+| `cursor-move` | both | `{ roomId, x, y }` | Live cursor position (optional) |
 
 ---
 
-## 📄 License
+## Internship Context
 
-This project is provided as-is for learning and prototyping purposes.
+> Developed as part of the **CodTech IT Solutions** internship program.
+>
+> **Intern:** Vikas Sharma | **ID:** CITS2901 | **Duration:** 4 Weeks
+
+---

@@ -1,5 +1,5 @@
 {
-  "name": "collab-design-server",
+  "name": "collab-board-server",
   "version": "1.0.0",
   "description": "Backend server for collaborative design tool",
   "main": "server.js",
