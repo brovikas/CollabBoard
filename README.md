@@ -4,7 +4,7 @@ A real-time collaborative whiteboard and notes app, built with the MERN stack (M
 
 ---
 
-- **Live Preview:** [https://collab-board-six-chi.vercel.app/](https://collab-board-six-chi.vercel.app/)
+- **Live Preview:** [collaboardvex.vercel.app]
 
 ## Features
 
